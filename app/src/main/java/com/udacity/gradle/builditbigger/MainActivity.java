@@ -1,22 +1,22 @@
 package com.udacity.gradle.builditbigger;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
+import com.udacity.nanodegree.jokesactivitylibrary.JokesActivity;
 
+import static com.udacity.nanodegree.jokesactivitylibrary.JokesActivity.JOKE_EXTRA;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointAsyncCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
 
@@ -43,8 +43,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        Toast.makeText(this, "derp", Toast.LENGTH_SHORT).show();
+        getJoke(this);
     }
 
+    public void getJoke(EndpointAsyncCallback callback) {
+        new EndpointAsync(callback).execute();
+    }
 
+    @Override
+    public void onEnded(String string) {
+        Intent intent = new Intent(this, JokesActivity.class);
+        intent.putExtra(JOKE_EXTRA, string);
+        startActivity(intent);
+    }
 }
+
